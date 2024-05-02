@@ -1,10 +1,11 @@
-require('dotenv').config();
+// File: server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const session = require('express-session');
+const passport = require('passport');
 const bodyParser = require('body-parser');
-const path = require('path');
+const authRoutes = require('./routes/auth'); // Import authentication routes
 
 const app = express();
 
@@ -12,7 +13,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: '542c97872cf61725699bd8671fea51de70b8145c27add4f2829559c595e90c78', // Replace with your session secret
   resave: true,
   saveUninitialized: true
 }));
@@ -20,24 +21,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/jobfit', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
 // Passport config
 require('./config/passport')(passport);
 
-// Routes
-const authRoutes = require('./routes/auth');
+// Use authentication routes
 app.use('/api/auth', authRoutes);
-
-// Serve static assets if in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
 
 // Start server
 const port = process.env.PORT || 5000;
