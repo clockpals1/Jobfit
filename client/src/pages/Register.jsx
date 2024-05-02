@@ -1,21 +1,17 @@
-// Register.js
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-//import { Button, Card, InputField } from '../components'; // Import newly created components
+import Button from '../components/Button';
+import InputField from '../components/InputField';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-import Button from '../components/Button'; // Adjust the import path accordingly
-import Card from '../components/Card';
-import InputField from '../components/InputField'; // Adjust the import path accordingly
-//import Card from '../components/Card';
-
-const Register = () => {
+function Register() {
   const [formData, setFormData] = useState({
     username: '',
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
+    password: ''
   });
 
   const { username, firstName, lastName, email, password } = formData;
@@ -31,9 +27,10 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Register</h2>
-      <Card title="Register Form" content="">
+    <div>
+      <Header />
+      <div className="container">
+        <h2 className="mb-4">Register</h2>
         <form onSubmit={handleSubmit}>
           <InputField
             type="text"
@@ -81,14 +78,16 @@ const Register = () => {
             value={password}
             onChange={handleChange}
           />
-          <Button type="submit" text="Register" variant="primary" onClick={() => {}} />
+          <Button type="submit" text="Register" variant="primary" />
         </form>
-      </Card>
+        {/* Login link */}
       <p className="mt-3 text-center">
         Already have an account? <Link to="/login">Login here</Link>
       </p>
+      </div>
+      <Footer />
     </div>
   );
-};
+}
 
 export default Register;
