@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Card.scss'; // Import the CSS file for styling
 
 const Card = ({ title, image = null, content }) => {
   return (
