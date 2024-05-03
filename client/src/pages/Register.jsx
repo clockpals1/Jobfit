@@ -1,39 +1,46 @@
-// Register.js
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-//import { Button, Card, InputField } from '../components'; // Import newly created components
+import axios from 'axios';
 
-import Button from '../components/Button'; // Adjust the import path accordingly
-import Card from '../components/Card';
-import InputField from '../components/InputField'; // Adjust the import path accordingly
-//import Card from '../components/Card';
+import Button from '../components/Button';
+import InputField from '../components/InputField';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-const Register = () => {
+function Register() {
   const [formData, setFormData] = useState({
     username: '',
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     email: '',
-    password: '',
+    password: ''
   });
 
-  const { username, firstName, lastName, email, password } = formData;
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const { username, firstname, lastname, email, password } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your registration logic here
-    console.log(formData);
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+      console.log(response.data);
+      setSuccessMessage('Registration successful. You can now login.');
+    } catch (error) {
+      console.error('Registration failed:', error.response.data);
+    }
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Register</h2>
-      <Card title="Register Form" content="">
+    <div>
+      <Header />
+      <div className="container">
+        <h2 className="mb-4">Register</h2>
+        {successMessage && <p className="text-success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <InputField
             type="text"
@@ -43,28 +50,22 @@ const Register = () => {
             value={username}
             onChange={handleChange}
           />
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <InputField
-                type="text"
-                name="firstName"
-                label="First Name"
-                placeholder="Enter your first name"
-                value={firstName}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6">
-              <InputField
-                type="text"
-                name="lastName"
-                label="Last Name"
-                placeholder="Enter your last name"
-                value={lastName}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+          <InputField
+            type="text"
+            name="firstname"
+            label="First Name"
+            placeholder="Enter your first name"
+            value={firstname}
+            onChange={handleChange}
+          />
+          <InputField
+            type="text"
+            name="lastname"
+            label="Last Name"
+            placeholder="Enter your last name"
+            value={lastname}
+            onChange={handleChange}
+          />
           <InputField
             type="email"
             name="email"
@@ -81,14 +82,15 @@ const Register = () => {
             value={password}
             onChange={handleChange}
           />
-          <Button type="submit" text="Register" variant="primary" onClick={() => {}} />
+          <Button type="submit" text="Register" variant="primary" />
         </form>
-      </Card>
-      <p className="mt-3 text-center">
-        Already have an account? <Link to="/login">Login here</Link>
-      </p>
+        <p className="mt-3 text-center">
+          Already have an account? <Link to="/login">Login here</Link>
+        </p>
+      </div>
+      <Footer />
     </div>
   );
-};
+}
 
 export default Register;

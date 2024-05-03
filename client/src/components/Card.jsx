@@ -1,9 +1,8 @@
-// Card.jsx
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Card.scss'; // Import the CSS file for styling
 
-const Card = ({ title = '', image = null, content = '' }) => {
+const Card = ({ title, image = null, content }) => {
   return (
     <div className="card">
       {image && <img src={image} className="card-img-top" alt={title} />}
@@ -16,9 +15,9 @@ const Card = ({ title = '', image = null, content = '' }) => {
 };
 
 Card.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   image: PropTypes.string,
-  content: PropTypes.string,
+  content: PropTypes.string.isRequired,
 };
 
 export default Card;

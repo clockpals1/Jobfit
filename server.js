@@ -1,15 +1,22 @@
-// File: server.js
-
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('passport');
+const passport = require('./config/passport'); // Correct the path as needed
 const bodyParser = require('body-parser');
-const authRoutes = require('./routes/auth'); // Import authentication routes
+const authRoutes = require('../Jobfit/api/auth/authRoutes'); // Import authentication routes
 
 const app = express();
 
+// Configure CORS
+const corsOptions = {
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  methods: ['GET', 'POST'], // Allow only GET and POST requests
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow only specific headers
+};
+
 // Middleware
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
@@ -21,12 +28,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/jobfit', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/jobfit')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
-
-// Passport config
-require('./config/passport')(passport);
 
 // Use authentication routes
 app.use('/api/auth', authRoutes);
