@@ -8,11 +8,13 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Register() {
+function Register() {
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
     lastname: '',
     email: '',
+    password: ''
     password: ''
   });
 
@@ -92,5 +94,7 @@ function Register() {
     </div>
   );
 }
+}
 
 export default Register;
+
