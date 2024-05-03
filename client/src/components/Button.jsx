@@ -1,6 +1,6 @@
-// Button.js
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Button.scss'; // Import the CSS file for styling
 
 const Button = ({ text, onClick, variant }) => {
   return (

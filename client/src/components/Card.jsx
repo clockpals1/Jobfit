@@ -1,7 +1,9 @@
+// Card.jsx
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Card = ({ title, image = null, content }) => {
+const Card = ({ title = '', image = null, content = '' }) => {
   return (
     <div className="card">
       {image && <img src={image} className="card-img-top" alt={title} />}
@@ -14,9 +16,9 @@ const Card = ({ title, image = null, content }) => {
 };
 
 Card.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   image: PropTypes.string,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
 };
 
 export default Card;

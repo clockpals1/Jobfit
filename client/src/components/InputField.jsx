@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import './InputField.sass'; // Import Sass file for styling
+import './InputField.scss'; // Import Sass file for styling
 
 const InputField = ({ type, name, label, placeholder, value, onChange }) => {
   return (
