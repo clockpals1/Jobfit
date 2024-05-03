@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+import Button from '../components/Button';
+import InputField from '../components/InputField';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Login() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { email, password } = formData;
 
@@ -19,12 +27,20 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/api/auth/login', formData);
-      console.log(res.data); // Assuming the server sends back a JWT token upon successful login
-      // Add logic to handle successful login (e.g., redirect to dashboard)
+      // Input validation
+      if (!email || !password) {
+        throw new Error('Email and password are required');
+      }
+
+      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      console.log(response.data);
+      // Store authentication token in localStorage
+      localStorage.setItem('accessToken', response.data.accessToken);
+      // Redirect to dashboard upon successful login
+      navigate('/dashboard');
     } catch (error) {
-      console.error(error.response.data); // Log any errors from the server
-      // Add logic to handle login errors (e.g., display error message to user)
+      console.error('Login failed:', error.response ? error.response.data.message : error.message);
+      setErrorMessage(error.response ? error.response.data.message : error.message);
     }
   };
 
@@ -33,32 +49,25 @@ function Login() {
       <Header />
       <div className="container">
         <h2 className="mb-4">Login</h2>
+        {errorMessage && <p className="text-danger">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="form-control"
-              value={email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="form-control"
-              value={password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">Login</button>
+          <InputField
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleChange}
+          />
+          <InputField
+            type="password"
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={handleChange}
+          />
+          <Button type="submit" text="Login" variant="primary" />
         </form>
       </div>
       <Footer />

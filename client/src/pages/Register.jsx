@@ -8,17 +8,16 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Register() {
-function Register() {
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
     lastname: '',
     email: '',
     password: ''
-    password: ''
   });
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { username, firstname, lastname, email, password } = formData;
 
@@ -32,8 +31,11 @@ function Register() {
       const response = await axios.post('http://localhost:5000/api/auth/register', formData);
       console.log(response.data);
       setSuccessMessage('Registration successful. You can now login.');
+      setErrorMessage(''); // Clear any previous error message
     } catch (error) {
       console.error('Registration failed:', error.response.data);
+      setErrorMessage(error.response.data.message); // Set error message
+      setSuccessMessage(''); // Clear any previous success message
     }
   };
 
@@ -43,6 +45,7 @@ function Register() {
       <div className="container">
         <h2 className="mb-4">Register</h2>
         {successMessage && <p className="text-success">{successMessage}</p>}
+        {errorMessage && <p className="text-danger">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <InputField
             type="text"
@@ -94,7 +97,5 @@ function Register() {
     </div>
   );
 }
-}
 
 export default Register;
-
